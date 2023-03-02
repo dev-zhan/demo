@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 public class TestBean {
     private String text = "Hello";
     public TestBean(){
-        System.out.println("Creating test Bean");
     }
     public void setText(String text){
         this.text=text;

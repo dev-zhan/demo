@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 @Service
@@ -19,8 +18,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleRepository roleRepository;
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException{
@@ -46,7 +43,7 @@ public class UserServiceImpl implements UserService {
                 ArrayList<Roles> roles = new ArrayList<>();
                 roles.add(role);
                 user.setRoles(roles);
-                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.setPassword(user.getPassword());
                 return userRepository.save(user);
             }
         }
