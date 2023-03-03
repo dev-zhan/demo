@@ -19,7 +19,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         source.setDefaultEncoding("UTF-8");
         return source;
     }
-
     @Bean
     public CookieLocaleResolver localeResolver() {
         CookieLocaleResolver resolver = new CookieLocaleResolver();
@@ -28,14 +27,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
         resolver.setCookieMaxAge(3600*24*365);
         return resolver;
     }
-
     @Bean
     public LocaleChangeInterceptor localeInterceptor(){
         LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
         interceptor.setParamName("lng");
         return interceptor;
     }
-
     @Override
     public void addInterceptors(InterceptorRegistry registry){
         registry.addInterceptor(localeInterceptor());
