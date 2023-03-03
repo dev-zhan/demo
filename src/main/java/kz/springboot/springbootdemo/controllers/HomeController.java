@@ -18,14 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 @Controller
 public class HomeController {
-    private final ItemService itemService;
-    private final UserService userService;
-
     @Autowired
-    public HomeController(ItemService itemService, UserService userService) {
-        this.itemService = itemService;
-        this.userService = userService;
-    }
+    private ItemService itemService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping(value = "/")
     public String index(Model model) {
@@ -38,6 +34,7 @@ public class HomeController {
     }
 
     @PostMapping(value = "/additem")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
     public String addItem(@RequestParam(name = "country_id") Long countryId,
                           @RequestParam(name = "item_name", defaultValue = "No Item") String name,
                           @RequestParam(name = "item_price", defaultValue = "0") int price,
@@ -55,6 +52,7 @@ public class HomeController {
     }
 
     @GetMapping(value = "/edititem/{idshka}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
     public String edititem(Model model, @PathVariable(name = "idshka") Long id) {
         model.addAttribute("currentUser",getUserData());
         ShopItems item = itemService.getItem(id);
@@ -74,6 +72,7 @@ public class HomeController {
     }
 
     @PostMapping(value = "/saveitem")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
     public String saveItem(@RequestParam(name = "id", defaultValue = "0") Long id,
                            @RequestParam(name = "country_id", defaultValue = "0") Long countryId,
                            @RequestParam(name = "item_name", defaultValue = "No Item") String name,
@@ -94,6 +93,7 @@ public class HomeController {
         return "redirect:/edititem/"+id;
     }
     @PostMapping(value = "/deleteitem")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
     public String deleteItem(@RequestParam(name = "id", defaultValue = "0") Long id) {
         ShopItems item = itemService.getItem((id));
         if (item != null) {
@@ -102,6 +102,7 @@ public class HomeController {
         return "redirect:/";
     }
     @PostMapping(value = "/assigncategory")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
     public String assignCategory(@RequestParam(name = "item_id")Long itemId,
                                  @RequestParam(name = "category_id")Long categoryId){
         Categories cat=itemService.getCategory(categoryId);
@@ -120,6 +121,7 @@ public class HomeController {
         return "redirect:/";
     }
     @PostMapping(value = "/unassigncategory")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
     public String unAssignCategory(@RequestParam(name = "item_id")Long itemId,
                                  @RequestParam(name = "category_id")Long categoryId){
         Categories cat=itemService.getCategory(categoryId);
@@ -155,6 +157,7 @@ public class HomeController {
         return "profile";
     }
     @GetMapping(value = "/additem")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
     public String additem(Model model){
         List<Countries> countries = itemService.getAllCountries();
         model.addAttribute("countries",countries);

@@ -20,6 +20,7 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
@@ -89,6 +90,7 @@
             <option th:each="cnt:${countries}" th:text="${cnt.name}+' / '+${cnt.code}" th:value="${cnt.id}" th:selected="${item!=null&&item.country!=null&&item.country.id==cnt.id}"></option>
           </select>
         </div>
+
         <div class="form-group">
           <button class="btn btn-success" th:text="#{button.add}"></button>
         </div>
