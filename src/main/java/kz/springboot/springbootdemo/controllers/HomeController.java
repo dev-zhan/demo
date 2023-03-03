@@ -1,4 +1,5 @@
 package kz.springboot.springbootdemo.controllers;
+
 import kz.springboot.springbootdemo.entities.Categories;
 import kz.springboot.springbootdemo.entities.Countries;
 import kz.springboot.springbootdemo.entities.ShopItems;
@@ -14,8 +15,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
 @Controller
 public class HomeController {
     private final ItemService itemService;
@@ -29,11 +32,11 @@ public class HomeController {
 
     @GetMapping(value = "/")
     public String index(Model model) {
-        model.addAttribute("currentUser",getUserData());
+        model.addAttribute("currentUser", getUserData());
         List<ShopItems> items = itemService.getALLItems();
         model.addAttribute("tovary", items);
         List<Countries> countries = itemService.getAllCountries();
-        model.addAttribute("countries",countries);
+        model.addAttribute("countries", countries);
         return "index";
     }
 
@@ -42,8 +45,8 @@ public class HomeController {
                           @RequestParam(name = "item_name", defaultValue = "No Item") String name,
                           @RequestParam(name = "item_price", defaultValue = "0") int price,
                           @RequestParam(name = "item_amount", defaultValue = "0") int amount) {
-        Countries cnt=itemService.getCountry(countryId);
-        if (cnt!=null){
+        Countries cnt = itemService.getCountry(countryId);
+        if (cnt != null) {
             ShopItems item = new ShopItems();
             item.setName(name);
             item.setPrice(price);
@@ -56,20 +59,20 @@ public class HomeController {
 
     @GetMapping(value = "/edititem/{idshka}")
     public String edititem(Model model, @PathVariable(name = "idshka") Long id) {
-        model.addAttribute("currentUser",getUserData());
+        model.addAttribute("currentUser", getUserData());
         ShopItems item = itemService.getItem(id);
         model.addAttribute("item", item);
         List<Countries> countries = itemService.getAllCountries();
-        model.addAttribute("countries",countries);
+        model.addAttribute("countries", countries);
         List<Categories> categories = itemService.getAllCategories();
         categories.removeAll(item.getCategories());
-        model.addAttribute("categories",categories);
+        model.addAttribute("categories", categories);
         return "edititem";
     }
 
     @GetMapping(value = "/about")
     public String about(Model model) {
-        model.addAttribute("currentUser",getUserData());
+        model.addAttribute("currentUser", getUserData());
         return "about";
     }
 
@@ -91,8 +94,9 @@ public class HomeController {
                 itemService.saveItem(item);
             }
         }
-        return "redirect:/edititem/"+id;
+        return "redirect:/edititem/" + id;
     }
+
     @PostMapping(value = "/deleteitem")
     public String deleteItem(@RequestParam(name = "id", defaultValue = "0") Long id) {
         ShopItems item = itemService.getItem((id));
@@ -101,93 +105,101 @@ public class HomeController {
         }
         return "redirect:/";
     }
+
     @PostMapping(value = "/assigncategory")
-    public String assignCategory(@RequestParam(name = "item_id")Long itemId,
-                                 @RequestParam(name = "category_id")Long categoryId){
-        Categories cat=itemService.getCategory(categoryId);
-        if (cat!=null){
-            ShopItems item=itemService.getItem(itemId);
-            if (item!=null){
-                List<Categories> categories=item.getCategories();
-                if (categories==null){
-                    categories=new ArrayList<>();
+    public String assignCategory(@RequestParam(name = "item_id") Long itemId,
+                                 @RequestParam(name = "category_id") Long categoryId) {
+        Categories cat = itemService.getCategory(categoryId);
+        if (cat != null) {
+            ShopItems item = itemService.getItem(itemId);
+            if (item != null) {
+                List<Categories> categories = item.getCategories();
+                if (categories == null) {
+                    categories = new ArrayList<>();
                 }
                 categories.add(cat);
                 itemService.saveItem(item);
-                return "redirect:/edititem/"+itemId+"#categoriesDiv";
+                return "redirect:/edititem/" + itemId + "#categoriesDiv";
             }
         }
         return "redirect:/";
     }
-    @PostMapping(value = "/unassigncategory")
-    public String unAssignCategory(@RequestParam(name = "item_id")Long itemId,
-                                 @RequestParam(name = "category_id")Long categoryId){
-        Categories cat=itemService.getCategory(categoryId);
-        if (cat!=null){
-            ShopItems item=itemService.getItem(itemId);
 
-            if (item!=null){
-                List<Categories> categories=item.getCategories();
-                if (categories==null){
-                    categories=new ArrayList<>();
+    @PostMapping(value = "/unassigncategory")
+    public String unAssignCategory(@RequestParam(name = "item_id") Long itemId,
+                                   @RequestParam(name = "category_id") Long categoryId) {
+        Categories cat = itemService.getCategory(categoryId);
+        if (cat != null) {
+            ShopItems item = itemService.getItem(itemId);
+
+            if (item != null) {
+                List<Categories> categories = item.getCategories();
+                if (categories == null) {
+                    categories = new ArrayList<>();
                 }
                 categories.remove(cat);
                 itemService.saveItem(item);
-                return "redirect:/edititem/"+itemId+"#categoriesDiv";
+                return "redirect:/edititem/" + itemId + "#categoriesDiv";
             }
         }
         return "redirect:/";
     }
+
     @GetMapping(value = "/403")
-    public String accesDenied(Model model){
-        model.addAttribute("currentUser",getUserData());
+    public String accesDenied(Model model) {
+        model.addAttribute("currentUser", getUserData());
         return "403";
     }
+
     @GetMapping(value = "/login")
-    public String login(Model model){
-        model.addAttribute("currentUser",getUserData());
+    public String login(Model model) {
+        model.addAttribute("currentUser", getUserData());
         return "login";
     }
+
     @GetMapping(value = "/profile")
     @PreAuthorize("isAuthenticated()")
-    public String profile(Model model){
-        model.addAttribute("currentUser",getUserData());
+    public String profile(Model model) {
+        model.addAttribute("currentUser", getUserData());
         return "profile";
     }
+
     @GetMapping(value = "/additem")
-    public String additem(Model model){
+    public String additem(Model model) {
         List<Countries> countries = itemService.getAllCountries();
-        model.addAttribute("countries",countries);
-        model.addAttribute("currentUser",getUserData());
+        model.addAttribute("countries", countries);
+        model.addAttribute("currentUser", getUserData());
         return "additem";
     }
+
     @GetMapping(value = "/register")
-    public String register(Model model){
-        model.addAttribute("currentUser",getUserData());
+    public String register(Model model) {
+        model.addAttribute("currentUser", getUserData());
         return "register";
     }
+
     @PostMapping(value = "/register")
-    public String toRegister(@RequestParam(name="user_email")String email,
-                             @RequestParam(name="user_password")String password,
-                             @RequestParam(name="re_user_password")String rePassword,
-                             @RequestParam(name="user_full_name")String fullName){
-    if (password.equals(rePassword)){
-        Users newUser = new Users();
-        newUser.setFullName(fullName);
-        newUser.setPassword(password);
-        newUser.setEmail(email);
-        if (userService.createUser(newUser)!=null){
-            return "redirect:/register?success";
+    public String toRegister(@RequestParam(name = "user_email") String email,
+                             @RequestParam(name = "user_password") String password,
+                             @RequestParam(name = "re_user_password") String rePassword,
+                             @RequestParam(name = "user_full_name") String fullName) {
+        if (password.equals(rePassword)) {
+            Users newUser = new Users();
+            newUser.setFullName(fullName);
+            newUser.setPassword(password);
+            newUser.setEmail(email);
+            if (userService.createUser(newUser) != null) {
+                return "redirect:/register?success";
+            }
+
         }
-
-    }
-    return "redirect:/register?error";
+        return "redirect:/register?error";
     }
 
-    private Users getUserData(){
+    private Users getUserData() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(! (authentication instanceof AnonymousAuthenticationToken)){
-            User secUser = (User)authentication.getPrincipal();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            User secUser = (User) authentication.getPrincipal();
             Users myUser = userService.getUserByEmail(secUser.getUsername());
             return myUser;
         }
