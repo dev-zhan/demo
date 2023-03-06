@@ -30,8 +30,8 @@ public class UserServiceImpl implements UserService {
             return secUser;
         }
         throw new UsernameNotFoundException("User not found");
-
     }
+
     @Override
     public Users getUserByEmail(String email){
         return userRepository.findByEmail(email);

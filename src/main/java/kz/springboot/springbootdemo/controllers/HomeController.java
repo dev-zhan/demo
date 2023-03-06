@@ -179,10 +179,10 @@ public class HomeController {
         newUser.setFullName(fullName);
         newUser.setPassword(password);
         newUser.setEmail(email);
+        System.out.println(newUser);
         if (userService.createUser(newUser)!=null){
             return "redirect:/register?success";
         }
-
     }
     return "redirect:/register?error";
     }
