@@ -120,6 +120,7 @@ public class HomeController {
         }
         return "redirect:/";
     }
+
     @PostMapping(value = "/unassigncategory")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
     public String unAssignCategory(@RequestParam(name = "item_id")Long itemId,
